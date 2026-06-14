@@ -3,14 +3,17 @@ import { getTeam, updateTeamTopic } from '@/lib/db';
 
 // Placeholder topics
 export const TOPICS = [
-  'Artificial Intelligence',
-  'Web3 & Blockchain',
-  'FinTech',
-  'HealthTech',
-  'EdTech',
-  'Cybersecurity',
-  'IoT & Smart Devices',
-  'GreenTech'
+  'Colgate bag',
+  'Pepsi scooter',
+  'Godrej toothpaste',
+  'Adidas Iron box',
+  'Lenovo squash',
+  'Apple chips',
+  'Tata mobile',
+  'Benz pencil',
+  'Tesla cookies',
+  'MacDonald wheelchair',
+  'Oreo drinks'
 ];
 
 export async function POST(request: Request) {

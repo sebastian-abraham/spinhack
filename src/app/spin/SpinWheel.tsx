@@ -3,17 +3,20 @@
 import { useState } from 'react';
 
 const TOPICS = [
-  'Artificial Intelligence',
-  'Web3 & Blockchain',
-  'FinTech',
-  'HealthTech',
-  'EdTech',
-  'Cybersecurity',
-  'IoT & Smart Devices',
-  'GreenTech'
+  'Colgate bag',
+  'Pepsi scooter',
+  'Godrej toothpaste',
+  'Adidas Iron box',
+  'Lenovo squash',
+  'Apple chips',
+  'Tata mobile',
+  'Benz pencil',
+  'Tesla cookies',
+  'MacDonald wheelchair',
+  'Oreo drinks'
 ];
 
-const colors = ['#ff007f', '#9d00ff', '#00f3ff', '#ff007f', '#9d00ff', '#00f3ff', '#ff007f', '#9d00ff'];
+const colors = ['#ff007f', '#9d00ff', '#00f3ff'];
 
 interface SpinWheelProps {
   onSpinComplete: (topic: string) => void;
@@ -86,7 +89,8 @@ export default function SpinWheel({ onSpinComplete, appNumber }: SpinWheelProps)
     }
   };
 
-  const gradientParts = TOPICS.map((_, i) => `${colors[i]} ${i * 45}deg ${(i + 1) * 45}deg`).join(', ');
+  const sliceAngleForGradient = 360 / TOPICS.length;
+  const gradientParts = TOPICS.map((_, i) => `${colors[i % colors.length]} ${i * sliceAngleForGradient}deg ${(i + 1) * sliceAngleForGradient}deg`).join(', ');
 
   return (
     <div className="wheel-container">
@@ -102,7 +106,8 @@ export default function SpinWheel({ onSpinComplete, appNumber }: SpinWheelProps)
         {TOPICS.map((topic, i) => {
           // conic gradient 0deg is top. CSS rotate 0deg is right.
           // So we rotate by angle - 90 to align text with the slice center.
-          const angle = (i * 45 + 22.5) - 90;
+          const sliceAngleForText = 360 / TOPICS.length;
+          const angle = (i * sliceAngleForText + sliceAngleForText / 2) - 90;
           return (
             <div 
               key={i} 
