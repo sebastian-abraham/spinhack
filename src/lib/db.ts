@@ -1,14 +1,16 @@
-import * as admin from 'firebase-admin';
+import { initializeApp, getApps, cert } from 'firebase-admin/app';
+import { getFirestore } from 'firebase-admin/firestore';
 
 // Check if Firebase env variables are set
 const isFirebaseConfigured = process.env.FIREBASE_PROJECT_ID && process.env.FIREBASE_CLIENT_EMAIL && process.env.FIREBASE_PRIVATE_KEY;
 
-if (isFirebaseConfigured && !admin.apps.length) {
+if (isFirebaseConfigured && getApps().length === 0) {
   try {
-    admin.initializeApp({
-      credential: admin.credential.cert({
+    initializeApp({
+      credential: cert({
         projectId: process.env.FIREBASE_PROJECT_ID,
         clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+        // Ensure literal \n in private key string are converted to actual newlines
         privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
       }),
     });
@@ -18,7 +20,7 @@ if (isFirebaseConfigured && !admin.apps.length) {
   }
 }
 
-const db = isFirebaseConfigured ? admin.firestore() : null;
+const db = isFirebaseConfigured ? getFirestore() : null;
 
 export type Team = {
   app_number: string;
@@ -28,8 +30,6 @@ export type Team = {
 };
 
 // --- MOCK DATABASE FALLBACK ---
-// We use a simple in-memory object for development if Firebase is not configured.
-// This ensures you can run the app immediately without waiting to set up Firebase!
 let mockDb: Record<string, Team> = {
   'APP123': { app_number: 'APP123', team_name: 'Cyber Knights', topic: null, locked_until: null },
   'APP456': { app_number: 'APP456', team_name: 'Byte Bandits', topic: null, locked_until: null },
