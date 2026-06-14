@@ -77,3 +77,38 @@ export async function updateTeamTopic(appNumber: string, topic: string): Promise
     mockDb[appNumber].locked_until = null;
   }
 }
+
+export async function getAllTeams(): Promise<Team[]> {
+  if (db) {
+    const snapshot = await db.collection('teams').get();
+    return snapshot.docs.map(doc => doc.data() as Team);
+  }
+  return Object.values(mockDb);
+}
+
+export async function addTeam(team: Team): Promise<void> {
+  if (db) {
+    await db.collection('teams').doc(team.app_number).set(team);
+    return;
+  }
+  mockDb[team.app_number] = team;
+}
+
+export async function updateTeam(appNumber: string, teamData: Partial<Team>): Promise<void> {
+  if (db) {
+    await db.collection('teams').doc(appNumber).update(teamData);
+    return;
+  }
+  if (mockDb[appNumber]) {
+    mockDb[appNumber] = { ...mockDb[appNumber], ...teamData };
+  }
+}
+
+export async function deleteTeam(appNumber: string): Promise<void> {
+  if (db) {
+    await db.collection('teams').doc(appNumber).delete();
+    return;
+  }
+  delete mockDb[appNumber];
+}
+
