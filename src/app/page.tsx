@@ -33,7 +33,11 @@ export default function Home() {
       } else {
         // Store in sessionStorage so spin page knows who is logged in
         sessionStorage.setItem('spinhack_team', JSON.stringify(data.team));
-        router.push('/spin');
+        if (data.team.topic) {
+          router.push('/dashboard');
+        } else {
+          router.push('/spin');
+        }
       }
     } catch (err) {
       setError('NETWORK ERROR. PLEASE TRY AGAIN.');

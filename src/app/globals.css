@@ -174,3 +174,60 @@ h1 {
   100% { text-shadow: 0 0 20px var(--neon-pink), 0 0 30px var(--neon-pink); transform: scale(1.05); }
 }
 
+
+/* Dashboard Styles */
+.dashboard-layout {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+.sidebar {
+  width: 300px;
+  border-right: 1px solid var(--neon-pink);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+}
+.main-content {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  color: var(--neon-blue);
+  text-decoration: none;
+  font-size: 0.8rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid transparent;
+  transition: all 0.3s;
+}
+.nav-item:hover, .nav-item.active {
+  border-color: var(--neon-pink);
+  color: var(--neon-pink);
+  background: rgba(255, 0, 127, 0.1);
+}
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  border: 1px solid var(--neon-pink);
+  padding: 1rem;
+}
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+.dashboard-card {
+  border: 1px solid var(--neon-pink);
+  padding: 1.5rem;
+  background: rgba(0, 0, 0, 0.5);
+}
+

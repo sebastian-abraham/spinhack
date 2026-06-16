@@ -20,7 +20,7 @@ export default function SpinPage() {
     const parsedTeam = JSON.parse(storedTeam);
     setTeam(parsedTeam);
     if (parsedTeam.topic) {
-      setFinalTopic(parsedTeam.topic);
+      router.push('/dashboard');
     }
   }, [router]);
 
@@ -45,6 +45,11 @@ export default function SpinPage() {
     const newTeam = { ...team, topic };
     sessionStorage.setItem('spinhack_team', JSON.stringify(newTeam));
     setTeam(newTeam);
+    
+    // Redirect after a short delay so they can see the result
+    setTimeout(() => {
+      router.push('/dashboard');
+    }, 2000);
   };
 
   if (!team) return <div className="retro-container">LOADING...</div>;
