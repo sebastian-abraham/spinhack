@@ -22,19 +22,36 @@ if (isFirebaseConfigured && getApps().length === 0) {
 
 const db = isFirebaseConfigured ? getFirestore() : null;
 
+export type TeamMember = {
+  name: string;
+  role: string;
+  status: string;
+};
+
 export type Team = {
   app_number: string;
   team_name: string;
   topic: string | null;
   locked_until: number | null; // Timestamp in milliseconds
+  members?: TeamMember[];
+};
+
+export type Announcement = {
+  id?: string;
+  title: string;
+  desc: string;
+  date: string;
+  createdAt: number;
 };
 
 // --- MOCK DATABASE FALLBACK ---
 let mockDb: Record<string, Team> = {
-  'APP123': { app_number: 'APP123', team_name: 'Cyber Knights', topic: null, locked_until: null },
-  'APP456': { app_number: 'APP456', team_name: 'Byte Bandits', topic: null, locked_until: null },
-  'APP789': { app_number: 'APP789', team_name: 'Neon Ninjas', topic: null, locked_until: null },
+  'APP123': { app_number: 'APP123', team_name: 'Cyber Knights', topic: null, locked_until: null, members: [] },
+  'APP456': { app_number: 'APP456', team_name: 'Byte Bandits', topic: null, locked_until: null, members: [] },
+  'APP789': { app_number: 'APP789', team_name: 'Neon Ninjas', topic: null, locked_until: null, members: [] },
 };
+
+let mockAnnouncements: Record<string, Announcement> = {};
 
 export async function getTeam(appNumber: string): Promise<Team | null> {
   if (db) {
@@ -45,7 +62,7 @@ export async function getTeam(appNumber: string): Promise<Team | null> {
     // Auto-create dummy teams in Firebase if they don't exist yet for testing purposes
     if (['APP123', 'APP456', 'APP789'].includes(appNumber)) {
         const dummyTeamName = mockDb[appNumber].team_name;
-        const newTeam: Team = { app_number: appNumber, team_name: dummyTeamName, topic: null, locked_until: null };
+        const newTeam: Team = { app_number: appNumber, team_name: dummyTeamName, topic: null, locked_until: null, members: [] };
         await db.collection('teams').doc(appNumber).set(newTeam);
         return newTeam;
     }
@@ -110,5 +127,31 @@ export async function deleteTeam(appNumber: string): Promise<void> {
     return;
   }
   delete mockDb[appNumber];
+}
+
+// Announcements CRUD
+export async function getAnnouncements(): Promise<Announcement[]> {
+  if (db) {
+    const snapshot = await db.collection('announcements').orderBy('createdAt', 'desc').get();
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Announcement));
+  }
+  return Object.values(mockAnnouncements).sort((a, b) => b.createdAt - a.createdAt);
+}
+
+export async function addAnnouncement(announcement: Omit<Announcement, 'id'>): Promise<void> {
+  if (db) {
+    await db.collection('announcements').add(announcement);
+    return;
+  }
+  const id = Date.now().toString();
+  mockAnnouncements[id] = { id, ...announcement };
+}
+
+export async function deleteAnnouncement(id: string): Promise<void> {
+  if (db) {
+    await db.collection('announcements').doc(id).delete();
+    return;
+  }
+  delete mockAnnouncements[id];
 }
 

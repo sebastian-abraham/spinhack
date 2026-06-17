@@ -1,14 +1,25 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Megaphone } from "lucide-react";
 
 export default function AnnouncementsPage() {
-  const announcements = [
-    { title: "Code of Conduct", desc: "Please read the full code of conduct before arriving at the venue. Any violations will result in immediate disqualification.", date: "12 MAY 2025, 10:00 AM" },
-    { title: "Important Update: Mid Check-in", desc: "The mid check-in time has been moved to 12:00 PM. Please ensure your team lead is present at the main desk.", date: "13 MAY 2025, 02:30 PM" },
-    { title: "Mentor Sessions Live", desc: "Mentor booking slots are now open! Visit the portal to book a 15-minute slot with our industry experts.", date: "14 MAY 2025, 09:15 AM" },
-    { title: "Food & Beverage Schedule", desc: "Dinner will be served at 08:00 PM on Day 1. Midnight snacks will be available near the hacking zone.", date: "15 MAY 2025, 04:00 PM" },
-  ];
+  const [announcements, setAnnouncements] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAnnouncements = async () => {
+      const res = await fetch('/api/announcements');
+      if (res.ok) {
+        const data = await res.json();
+        setAnnouncements(data.announcements);
+      }
+      setLoading(false);
+    };
+    fetchAnnouncements();
+  }, []);
+
+  if (loading) return <div style={{ color: "var(--neon-pink)", textAlign: "center", marginTop: "2rem" }}>LOADING...</div>;
 
   return (
     <div style={{ maxWidth: "800px", margin: "0 auto", paddingBottom: "3rem" }}>
@@ -25,10 +36,13 @@ export default function AnnouncementsPage() {
                 <h3 style={{ color: "var(--neon-blue)", margin: 0, fontSize: "1.2rem", lineHeight: "1.4" }}>{item.title}</h3>
                 <span style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.6rem" }}>{item.date}</span>
               </div>
-              <p style={{ color: "rgba(255,255,255,0.8)", fontSize: "0.9rem", lineHeight: "1.6" }}>{item.desc}</p>
+              <p style={{ color: "rgba(255,255,255,0.8)", fontSize: "0.9rem", lineHeight: "1.6", whiteSpace: "pre-wrap" }}>{item.desc}</p>
             </div>
           </div>
         ))}
+        {announcements.length === 0 && (
+          <div style={{ textAlign: "center", color: "rgba(255,255,255,0.5)", padding: "2rem" }}>NO ANNOUNCEMENTS YET.</div>
+        )}
       </div>
     </div>
   );

@@ -52,18 +52,17 @@ export default function ProfilePage() {
             </tr>
           </thead>
           <tbody>
-            {[
-              { name: "Alice Hacker", role: "Frontend", status: "Verified" },
-              { name: "Bob Coder", role: "Backend", status: "Verified" },
-              { name: "Charlie Dev", role: "Design", status: "Pending" },
-              { name: "Diana Script", role: "Data", status: "Verified" },
-            ].map((m, i) => (
+            {(team.members && team.members.length > 0) ? team.members.map((m: any, i: number) => (
               <tr key={i} style={{ borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
                 <td style={{ padding: "1rem" }}>{m.name}</td>
                 <td style={{ padding: "1rem" }}>{m.role}</td>
                 <td style={{ padding: "1rem", color: m.status === "Verified" ? "#00ff00" : "orange" }}>{m.status}</td>
               </tr>
-            ))}
+            )) : (
+              <tr>
+                <td colSpan={3} style={{ padding: "1rem", textAlign: "center", color: "rgba(255,255,255,0.5)" }}>No members added yet.</td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>

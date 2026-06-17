@@ -2,10 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { LogOut, Calendar, Monitor, Users, ShieldCheck, ChevronRight, Clock, MapPin, Megaphone, User } from "lucide-react";
 
 export default function DashboardPage() {
   const [team, setTeam] = useState<any>(null);
+  const [timeLeft, setTimeLeft] = useState<string>("00D : 00H : 00M : 00S");
+  const [announcements, setAnnouncements] = useState<any[]>([]);
   const router = useRouter();
 
   useEffect(() => {
@@ -15,7 +18,39 @@ export default function DashboardPage() {
       return;
     }
     setTeam(JSON.parse(storedTeam));
+    
+    // Fetch latest announcements for the dashboard
+    fetch('/api/announcements')
+      .then(res => res.json())
+      .then(data => {
+        if (data.announcements) {
+          setAnnouncements(data.announcements.slice(0, 2)); // Only show top 2
+        }
+      })
+      .catch(console.error);
   }, [router]);
+
+  useEffect(() => {
+    const targetDate = new Date("June 21, 2025 22:00:00").getTime();
+    const interval = setInterval(() => {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+
+      if (distance < 0) {
+        clearInterval(interval);
+        setTimeLeft("00D : 00H : 00M : 00S");
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      setTimeLeft(`${days.toString().padStart(2, '0')}D : ${hours.toString().padStart(2, '0')}H : ${minutes.toString().padStart(2, '0')}M : ${seconds.toString().padStart(2, '0')}S`);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleLogout = () => {
     sessionStorage.removeItem('spinhack_team');
@@ -31,14 +66,14 @@ export default function DashboardPage() {
         <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
           <Calendar color="var(--neon-blue)" />
           <div>
-            <div style={{ color: "var(--neon-blue)", fontSize: "0.8rem", marginBottom: "0.2rem" }}>15 - 17 MAY 2025</div>
+            <div style={{ color: "var(--neon-blue)", fontSize: "0.8rem", marginBottom: "0.2rem" }}>21 JUNE 6:00PM TO 10:00PM</div>
             <div style={{ fontSize: "0.6rem", color: "rgba(255,255,255,0.7)" }}>// THE ULTIMATE HACKATHON EXPERIENCE //</div>
           </div>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "2rem" }}>
-          <div style={{ textAlign: "right" }}>
-            <div style={{ color: "var(--neon-pink)", fontSize: "0.6rem", marginBottom: "0.5rem" }}>HACK STARTS IN</div>
-            <div style={{ color: "var(--neon-blue)", fontSize: "1.2rem" }}>02D : 14H : 22M : 18S</div>
+          <div style={{ textAlign: "right", minWidth: "180px" }}>
+            <div style={{ color: "var(--neon-pink)", fontSize: "0.6rem", marginBottom: "0.5rem" }}>HACK ENDS IN</div>
+            <div style={{ color: "var(--neon-blue)", fontSize: "1.2rem", fontVariantNumeric: "tabular-nums" }}>{timeLeft}</div>
           </div>
           <button onClick={handleLogout} style={{ display: "flex", alignItems: "center", gap: "0.5rem", background: "transparent", border: "1px solid var(--neon-pink)", color: "var(--neon-pink)", padding: "0.5rem 1rem", cursor: "pointer", fontFamily: "inherit", fontSize: "0.8rem", transition: "all 0.3s" }} onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,0,127,0.2)'} onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
             LOGOUT <LogOut size={16} />
@@ -59,7 +94,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Stats Cards */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1rem", marginBottom: "1.5rem" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1rem", marginBottom: "1.5rem" }}>
         <div className="dashboard-card" style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
           <div style={{ background: "rgba(255,0,127,0.2)", padding: "0.5rem", borderRadius: "4px" }}><User color="var(--neon-pink)" /></div>
           <div>
@@ -71,14 +106,7 @@ export default function DashboardPage() {
           <div style={{ background: "rgba(255,0,127,0.2)", padding: "0.5rem", borderRadius: "4px" }}><Users color="var(--neon-pink)" /></div>
           <div>
             <div style={{ color: "var(--neon-blue)", fontSize: "0.6rem", marginBottom: "0.5rem" }}>TEAM MEMBERS</div>
-            <div style={{ fontSize: "1rem", color: "var(--neon-pink)" }}>4</div>
-          </div>
-        </div>
-        <div className="dashboard-card" style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-          <div style={{ background: "rgba(255,0,127,0.2)", padding: "0.5rem", borderRadius: "4px" }}><Calendar color="var(--neon-pink)" /></div>
-          <div>
-            <div style={{ color: "var(--neon-blue)", fontSize: "0.6rem", marginBottom: "0.5rem" }}>REGISTRATION DATE</div>
-            <div style={{ fontSize: "1rem" }}>10 MAY 2025</div>
+            <div style={{ fontSize: "1rem", color: "var(--neon-pink)" }}>{team.members?.length || 0}</div>
           </div>
         </div>
         <div className="dashboard-card" style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
@@ -102,9 +130,6 @@ export default function DashboardPage() {
               Revolutionizing snack breaks with smart, sustainable energy.
             </p>
           </div>
-          <button style={{ background: "transparent", border: "1px solid var(--neon-pink)", color: "var(--neon-pink)", padding: "1rem", width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", cursor: "pointer", fontFamily: "inherit" }} onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,0,127,0.2)'} onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
-            VIEW DETAILS <ChevronRight size={16} />
-          </button>
         </div>
 
         {/* Schedule */}
@@ -138,11 +163,7 @@ export default function DashboardPage() {
         <div className="dashboard-card">
           <div style={{ color: "var(--neon-blue)", fontSize: "0.8rem", marginBottom: "2rem" }}>ANNOUNCEMENTS</div>
           <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem", marginBottom: "2rem" }}>
-            {[
-              { title: "Code of Conduct", desc: "Please read before the event.", date: "12 MAY" },
-              { title: "Important Update", desc: "Mid check-in time updated.", date: "13 MAY" },
-              { title: "Mentor Sessions", desc: "Book your slot now!", date: "14 MAY" }
-            ].map((item, i) => (
+            {announcements.map((item, i) => (
               <div key={i} style={{ display: "flex", gap: "1rem" }}>
                 <Megaphone size={20} color="var(--neon-pink)" style={{ flexShrink: 0 }} />
                 <div style={{ flex: 1 }}>
@@ -150,14 +171,17 @@ export default function DashboardPage() {
                     <div style={{ color: "var(--neon-blue)", fontSize: "0.7rem" }}>{item.title}</div>
                     <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.6rem" }}>{item.date}</div>
                   </div>
-                  <div style={{ color: "rgba(255,255,255,0.6)", fontSize: "0.6rem", lineHeight: "1.4" }}>{item.desc}</div>
+                  <div style={{ color: "rgba(255,255,255,0.6)", fontSize: "0.6rem", lineHeight: "1.4", overflow: "hidden", textOverflow: "ellipsis", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>{item.desc}</div>
                 </div>
               </div>
             ))}
+            {announcements.length === 0 && (
+              <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.8rem", textAlign: "center", padding: "1rem" }}>NO ANNOUNCEMENTS YET.</div>
+            )}
           </div>
-          <button style={{ background: "transparent", border: "1px solid var(--neon-pink)", color: "var(--neon-pink)", padding: "1rem", width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", cursor: "pointer", fontFamily: "inherit" }} onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,0,127,0.2)'} onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+          <Link href="/dashboard/announcements" style={{ textDecoration: "none", background: "transparent", border: "1px solid var(--neon-pink)", color: "var(--neon-pink)", padding: "1rem", width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", cursor: "pointer", fontFamily: "inherit" }} onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,0,127,0.2)'} onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
             VIEW ALL <ChevronRight size={16} />
-          </button>
+          </Link>
         </div>
 
       </div>
