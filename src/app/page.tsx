@@ -48,7 +48,19 @@ export default function Home() {
 
   return (
     <div className="retro-container">
-      <h1>SPINHACK</h1>
+      <div className="logo-container">
+        <div className="logo-arrows">
+          <span style={{ animationDelay: '0s' }}>&gt;</span>
+          <span style={{ animationDelay: '0.2s' }}>&gt;</span>
+          <span style={{ animationDelay: '0.4s' }}>&gt;</span>
+        </div>
+        <h1 className="logo-text">SPINHACK 2.0</h1>
+        <div className="logo-arrows">
+          <span style={{ animationDelay: '0.4s' }}>&lt;</span>
+          <span style={{ animationDelay: '0.2s' }}>&lt;</span>
+          <span style={{ animationDelay: '0s' }}>&lt;</span>
+        </div>
+      </div>
       <form onSubmit={handleLogin}>
         <input 
           type="text" 

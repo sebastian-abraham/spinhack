@@ -180,15 +180,12 @@ export default function DashboardPage() {
 
       </div>
 
-      <div style={{ marginTop: "3rem", display: "flex", justifyContent: "center", alignItems: "center", gap: "2rem", color: "var(--neon-blue)", fontSize: "0.7rem", paddingBottom: "2rem" }}>
-        <div>POWERED BY</div>
+      <div style={{ marginTop: "3rem", display: "flex", justifyContent: "center", alignItems: "center", gap: "1rem", color: "var(--neon-blue)", fontSize: "0.7rem", paddingBottom: "2rem" }}>
+        <div style={{ paddingTop: "0.8rem" }}>POWERED BY</div>
         <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-          <h2 style={{ margin: 0, fontSize: "1.5rem" }}>SB SPINHACK</h2>
-          <div style={{ width: "1px", height: "30px", background: "var(--neon-blue)" }}></div>
-          <div style={{ textAlign: "right" }}>
-            <h2 style={{ margin: 0, fontSize: "1.5rem" }}>IEEE</h2>
-            <div style={{ fontSize: "0.5rem" }}>Advancing Technology for Humanity</div>
-          </div>
+          <img src="/logos/saintgits_ieee.png" alt="Saintgits IEEE" style={{ height: "60px", filter: "brightness(0) invert(1) drop-shadow(0 0 5px var(--neon-blue)) brightness(1.2)" }} />
+          <div style={{ width: "1px", height: "50px", background: "var(--neon-blue)" }}></div>
+          <img src="/logos/ieee.png" alt="IEEE" style={{ height: "60px", filter: "brightness(0) invert(1) drop-shadow(0 0 5px var(--neon-blue)) brightness(1.2)" }} />
         </div>
       </div>
       

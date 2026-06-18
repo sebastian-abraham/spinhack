@@ -231,3 +231,42 @@ h1 {
   background: rgba(0, 0, 0, 0.5);
 }
 
+/* Animated Logo Styles */
+.logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.logo-arrows {
+  display: flex;
+  gap: 0.2rem;
+  color: var(--neon-pink);
+  font-size: 1.5rem;
+  text-shadow: 0 0 10px var(--neon-pink);
+}
+
+.logo-arrows span {
+  animation: arrowPulse 1.5s infinite;
+}
+
+@keyframes arrowPulse {
+  0%, 100% { opacity: 0.3; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.1); text-shadow: 0 0 20px var(--neon-pink); }
+}
+
+.logo-text {
+  font-size: 1.8rem;
+  color: white;
+  text-shadow: 0 0 10px white, 0 0 20px var(--neon-blue);
+  animation: float 3s ease-in-out infinite;
+  margin: 0;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+

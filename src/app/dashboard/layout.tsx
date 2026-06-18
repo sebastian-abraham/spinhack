@@ -12,10 +12,19 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     <div className="dashboard-layout">
       <div className="sidebar">
         <div style={{ textAlign: "center", marginBottom: "3rem" }}>
-          <h1 style={{ color: "var(--neon-blue)", textShadow: "0 0 10px var(--neon-blue)", margin: 0, fontSize: "1.5rem" }}>
-            SPINHACK
-          </h1>
-          <div style={{ color: "var(--neon-blue)", fontSize: "0.8rem", marginTop: "0.5rem", textAlign: "right" }}>v2.0</div>
+          <div className="logo-container" style={{ marginBottom: "0", gap: "0.3rem" }}>
+            <div className="logo-arrows" style={{ fontSize: "0.6rem", gap: "0.1rem" }}>
+              <span style={{ animationDelay: '0s' }}>&gt;</span>
+              <span style={{ animationDelay: '0.2s' }}>&gt;</span>
+              <span style={{ animationDelay: '0.4s' }}>&gt;</span>
+            </div>
+            <h1 className="logo-text" style={{ fontSize: "0.85rem", whiteSpace: "nowrap" }}>SPINHACK 2.0</h1>
+            <div className="logo-arrows" style={{ fontSize: "0.6rem", gap: "0.1rem" }}>
+              <span style={{ animationDelay: '0.4s' }}>&lt;</span>
+              <span style={{ animationDelay: '0.2s' }}>&lt;</span>
+              <span style={{ animationDelay: '0s' }}>&lt;</span>
+            </div>
+          </div>
         </div>
 
         <nav style={{ flex: 1 }}>
