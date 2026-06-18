@@ -2,9 +2,10 @@
 
 export default function SupportPage() {
   const contacts = [
-    { name: "John Doe", role: "Lead Organizer", phone: "+1 234 567 8900" },
-    { name: "Jane Smith", role: "Technical Lead", phone: "+1 987 654 3210" },
-    { name: "Alex Johnson", role: "Event Coordinator", phone: "+1 555 123 4567" },
+    { name: "Abhiram", role: "Event Organizer", phone: "+91 8078 055 863" },
+    { name: "Arin", role: "Event Organizer", phone: "+91 92071 79584" },
+    { name: "Nandana", role: "Event Organizer", phone: "+91 85907 76933" },
+    { name: "Shone", role: "Event Organizer", phone: "+91 85903 51752" },
   ];
 
   return (

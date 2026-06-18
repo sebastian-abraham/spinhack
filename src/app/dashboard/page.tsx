@@ -31,16 +31,24 @@ export default function DashboardPage() {
   }, [router]);
 
   useEffect(() => {
-    const targetDate = new Date("June 21, 2025 22:00:00").getTime();
+    const startDate = new Date("June 21, 2025 18:00:00").getTime();
+    const endDate = new Date("June 21, 2025 22:00:00").getTime();
+
     const interval = setInterval(() => {
       const now = new Date().getTime();
-      const distance = targetDate - now;
+      
+      if (now < startDate) {
+        setTimeLeft("00D : 04H : 00M : 00S");
+        return;
+      }
 
-      if (distance < 0) {
+      if (now > endDate) {
         clearInterval(interval);
         setTimeLeft("00D : 00H : 00M : 00S");
         return;
       }
+
+      const distance = endDate - now;
 
       const days = Math.floor(distance / (1000 * 60 * 60 * 24));
       const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -132,31 +140,17 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Schedule */}
-        <div className="dashboard-card">
-          <div style={{ color: "var(--neon-blue)", fontSize: "0.8rem", marginBottom: "2rem" }}>UPCOMING SCHEDULE</div>
-          <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem", marginBottom: "2rem" }}>
-            {[
-              { title: "Hackathon Start", time: "15 May 2025, 09:00 AM" },
-              { title: "Mid Check-in", time: "16 May 2025, 12:00 PM" },
-              { title: "Final Submission", time: "17 May 2025, 05:00 PM" },
-              { title: "Results & Closing", time: "17 May 2025, 07:00 PM" }
-            ].map((item, i) => (
-              <div key={i} style={{ display: "flex", gap: "1rem", position: "relative" }}>
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                  <Clock size={16} color="var(--neon-pink)" />
-                  {i < 3 && <div style={{ width: "1px", height: "100%", borderLeft: "dashed 1px rgba(255,0,127,0.5)", flex: 1, marginTop: "0.5rem" }}></div>}
-                </div>
-                <div>
-                  <div style={{ color: "var(--neon-blue)", fontSize: "0.7rem", marginBottom: "0.3rem" }}>{item.title}</div>
-                  <div style={{ color: "rgba(255,255,255,0.6)", fontSize: "0.6rem" }}>{item.time}</div>
-                </div>
-              </div>
-            ))}
+        {/* Guidelines */}
+        <div className="dashboard-card" style={{ display: "flex", flexDirection: "column" }}>
+          <div style={{ color: "var(--neon-blue)", fontSize: "0.8rem", marginBottom: "2rem" }}>GUIDELINES</div>
+          <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", marginBottom: "2rem" }}>
+            <p style={{ color: "rgba(255,255,255,0.8)", fontSize: "0.9rem", lineHeight: "1.6" }}>
+              Make sure to read through the complete rules, submission format, and judging criteria before you begin developing.
+            </p>
           </div>
-          <button style={{ background: "transparent", border: "1px solid var(--neon-pink)", color: "var(--neon-pink)", padding: "1rem", width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", cursor: "pointer", fontFamily: "inherit" }} onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,0,127,0.2)'} onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
-            VIEW FULL SCHEDULE <ChevronRight size={16} />
-          </button>
+          <Link href="/dashboard/guidelines" style={{ textDecoration: "none", background: "transparent", border: "1px solid var(--neon-pink)", color: "var(--neon-pink)", padding: "1rem", width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", cursor: "pointer", fontFamily: "inherit" }} onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,0,127,0.2)'} onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+            VIEW FULL GUIDELINES <ChevronRight size={16} />
+          </Link>
         </div>
 
         {/* Announcements */}

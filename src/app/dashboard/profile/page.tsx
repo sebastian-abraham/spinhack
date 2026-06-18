@@ -34,10 +34,6 @@ export default function ProfilePage() {
             <label style={{ display: "block", color: "rgba(255,255,255,0.6)", fontSize: "0.7rem", marginBottom: "0.5rem" }}>APPLICATION NUMBER</label>
             <input type="text" className="retro-input" value={team.app_number} readOnly style={{ margin: 0, textAlign: "left", background: "rgba(0,0,0,0.3)" }} />
           </div>
-          <div>
-            <label style={{ display: "block", color: "rgba(255,255,255,0.6)", fontSize: "0.7rem", marginBottom: "0.5rem" }}>CONTACT EMAIL (LEAD)</label>
-            <input type="text" className="retro-input" defaultValue="lead@example.com" style={{ margin: 0, textAlign: "left" }} />
-          </div>
         </div>
       </div>
 
