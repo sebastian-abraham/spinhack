@@ -31,8 +31,8 @@ export default function DashboardPage() {
   }, [router]);
 
   useEffect(() => {
-    const startDate = new Date("June 21, 2025 18:00:00").getTime();
-    const endDate = new Date("June 21, 2025 22:00:00").getTime();
+    const startDate = new Date("June 21, 2026 18:00:00").getTime();
+    const endDate = new Date("June 21, 2026 22:00:00").getTime();
 
     const interval = setInterval(() => {
       const now = new Date().getTime();
